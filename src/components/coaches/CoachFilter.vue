@@ -33,7 +33,7 @@ export default {
   methods: {
     setFilter(event) {
       const inputId = event.target.id;
-      //   console.log([inputId]);
+      // console.log(inputId);
       const isActive = event.target.checked;
       const updatedFilters = {
         ...this.filters,
