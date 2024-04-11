@@ -6,7 +6,9 @@
     <BaseCard>
       <div class="controls">
         <BaseButton :link="false" mode="outline"> Refresh </BaseButton>
-        <BaseButton :link="true" to="/register">Register as Coach</BaseButton>
+        <BaseButton v-if="!isCoachRegistered" :link="true" to="/register"
+          >Register as Coach</BaseButton
+        >
       </div>
       <ul v-if="hasCoaches">
         <CoachItem
@@ -62,6 +64,10 @@ export default {
 
     hasCoaches() {
       return this.$store.getters['coaches/hasCoaches'];
+    },
+
+    isCoachRegistered() {
+      return this.$store.getters['coaches/isCoach'];
     },
   },
 

@@ -25,7 +25,9 @@ export default {
 
   computed: {
     fullName() {
-      return `${this.firstName} ${this.lastName}`;
+      return `${
+        this.firstName.charAt(0).toUpperCase() + this.firstName.slice(1)
+      } ${this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1)}`;
     },
 
     coachContactLink() {
