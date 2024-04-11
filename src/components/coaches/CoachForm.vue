@@ -1,22 +1,22 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !firstNameIsValid }">
       <label for="firstname">FirstName</label>
       <input type="text" id="firstname" v-model.trim="firstName" />
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !lastNameIsValid }">
       <label for="lastname">LastName</label>
       <input type="text" id="lastname" v-model.trim="lastName" />
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !descriptionIsValid }">
       <label for="description">Description</label>
       <textarea id="description" rows="5" v-model.trim="description"></textarea>
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !rateIsValid }">
       <label for="rate">Hourly Rate</label>
       <input type="number" id="rate" v-model.number="rate" />
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !areasIsValid }">
       <h3>Areas of Expertise</h3>
       <div>
         <input type="checkbox" id="frontend" value="frontend" v-model="areas" />
@@ -46,11 +46,38 @@ export default {
       description: '',
       rate: null,
       areas: [],
+      firstNameIsValid: true,
+      lastNameIsValid: true,
+      descriptionIsValid: true,
+      rateIsValid: true,
+      areasIsValid: true,
     };
   },
 
   methods: {
     submitForm() {
+      if (this.firstName.length === 0) {
+        this.firstNameIsValid = false;
+        alert('Please enter your first name');
+        return;
+      } else if (this.lastName.length === 0) {
+        this.lastNameIsValid = false;
+        alert('Please enter your last name');
+        return;
+      } else if (this.description.length === 0) {
+        this.descriptionIsValid = false;
+        alert('Please describe your self');
+        return;
+      } else if (this.rate <= 0) {
+        this.rateIsValid = false;
+        alert('Please enter your hourly rate');
+        return;
+      } else if (this.areas.length === 0) {
+        this.areasIsValid = false;
+        alert('Please choose your area of expertise');
+        return;
+      }
+
       const formData = {
         first: this.firstName,
         last: this.lastName,
