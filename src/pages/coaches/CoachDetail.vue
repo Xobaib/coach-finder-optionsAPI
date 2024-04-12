@@ -55,7 +55,8 @@ export default {
     },
 
     contactLink() {
-      return `${this.$route.path}/contact`;
+      // return `${this.$route.path}/contact`;
+      return `/coaches/${this.id}/contact`;
     },
   },
 };
