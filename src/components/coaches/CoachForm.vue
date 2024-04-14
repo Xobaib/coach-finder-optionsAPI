@@ -143,7 +143,6 @@ export default {
       this.validateForm();
 
       if (!this.formIsValid) {
-        console.log('data not sended');
         return;
       }
 
@@ -157,7 +156,6 @@ export default {
 
       //   console.log(formData);
       this.$emit('save-data', formData);
-      console.log('data sended');
     },
   },
 };
