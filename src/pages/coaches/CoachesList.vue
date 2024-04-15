@@ -8,11 +8,17 @@
         <BaseButton :link="false" mode="outline" @click="loadCoaches">
           Refresh
         </BaseButton>
-        <BaseButton v-if="!isCoachRegistered" :link="true" to="/register"
+        <BaseButton
+          v-if="!isLoading && !isCoachRegistered"
+          :link="true"
+          to="/register"
           >Register as Coach</BaseButton
         >
       </div>
-      <ul v-if="hasCoaches">
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
+      <ul v-else-if="hasCoaches">
         <CoachItem
           v-for="coach in filteredCoaches"
           :key="coach.id"
@@ -31,6 +37,7 @@
 <script>
 import CoachItem from '../../components/coaches/CoachItem.vue';
 import CoachFilter from '../../components/coaches/CoachFilter.vue';
+
 export default {
   components: {
     CoachItem,
@@ -39,6 +46,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -65,7 +73,7 @@ export default {
     },
 
     hasCoaches() {
-      return this.$store.getters['coaches/hasCoaches'];
+      return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
     },
 
     isCoachRegistered() {
@@ -78,8 +86,10 @@ export default {
       this.activeFilters = updatedFilters;
     },
 
-    loadCoaches() {
-      this.$store.dispatch('coaches/loadCoaches');
+    async loadCoaches() {
+      this.isLoading = true;
+      await this.$store.dispatch('coaches/loadCoaches');
+      this.isLoading = false;
     },
   },
 
