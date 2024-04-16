@@ -1,10 +1,19 @@
 <template>
+  <BaseDialog
+    :show="!!error"
+    :title="'Faild to fetch requests'"
+    @close="closeDialog"
+    >{{ error }}</BaseDialog
+  >
   <section>
     <BaseCard>
       <header>
         <h2>Requests Received</h2>
       </header>
-      <ul v-if="hasRequests">
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
+      <ul v-else-if="hasRequests && !isLoading">
         <RequestItem
           v-for="request in receivedRequests"
           :key="request.id"
@@ -25,6 +34,29 @@ export default {
     RequestItem,
   },
 
+  data() {
+    return {
+      isLoading: false,
+      error: null,
+    };
+  },
+
+  methods: {
+    async loadRequests() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('requests/loadRequests');
+      } catch (error) {
+        this.error = error;
+      }
+      this.isLoading = false;
+    },
+
+    closeDialog() {
+      this.error = null;
+    },
+  },
+
   computed: {
     receivedRequests() {
       return this.$store.getters['requests/requests'];
@@ -32,11 +64,11 @@ export default {
 
     hasRequests() {
       return this.$store.getters['requests/hasRequests'];
-
-      //   return this.receivedRequests.length > 0 ? true : false;
-
-      //   return this.receivedRequests && this.receivedRequests.length > 0;
     },
+  },
+
+  mounted() {
+    this.loadRequests();
   },
 };
 </script>
