@@ -1,35 +1,43 @@
 <template>
-  <BaseCard>
-    <form @submit.prevent="submitForm">
-      <div class="form-control" :class="{ errors: !email.isValid }">
-        <label for="email">E-Mail</label>
-        <input
-          type="email"
-          id="email"
-          v-model.trim="email.value"
-          @blur="clearValidity('email')"
-        />
-        <p v-if="!email.isValid">Please enter your email address</p>
-      </div>
-      <div class="form-control" :class="{ errors: !password.isValid }">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model.trim="password.value"
-          @blur="clearValidity('password')"
-        />
-        <p v-if="!password.isValid">
-          Your password must not be less than 6 characters
-        </p>
-      </div>
-      <p v-if="!formIsValid">Please fix the above errors and try again</p>
-      <BaseButton type="submit">{{ submitButtonCaption }}</BaseButton>
-      <BaseButton type="button" mode="flat" @click="switchAuthMode">{{
-        switchModeButtonCaption
-      }}</BaseButton>
-    </form>
-  </BaseCard>
+  <div>
+    <BaseDialog :show="!!error" title="An error occurred" @close="closeDialog"
+      ><p>{{ error }}</p></BaseDialog
+    >
+    <BaseDialog :show="isLoading" fixed title="Authenticating...">
+      <BaseSpinner />
+    </BaseDialog>
+    <BaseCard>
+      <form @submit.prevent="submitForm">
+        <div class="form-control" :class="{ errors: !email.isValid }">
+          <label for="email">E-Mail</label>
+          <input
+            type="email"
+            id="email"
+            v-model.trim="email.value"
+            @blur="clearValidity('email')"
+          />
+          <p v-if="!email.isValid">Please enter your email address</p>
+        </div>
+        <div class="form-control" :class="{ errors: !password.isValid }">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            v-model.trim="password.value"
+            @blur="clearValidity('password')"
+          />
+          <p v-if="!password.isValid">
+            Your password must not be less than 6 characters
+          </p>
+        </div>
+        <p v-if="!formIsValid">Please fix the above errors and try again</p>
+        <BaseButton type="submit">{{ submitButtonCaption }}</BaseButton>
+        <BaseButton type="button" mode="flat" @click="switchAuthMode">{{
+          switchModeButtonCaption
+        }}</BaseButton>
+      </form>
+    </BaseCard>
+  </div>
 </template>
 
 <script>
@@ -49,6 +57,10 @@ export default {
       formIsValid: true,
 
       mode: 'login',
+
+      isLoading: false,
+
+      error: null,
     };
   },
 
@@ -66,21 +78,29 @@ export default {
       }
     },
 
-    submitForm() {
+    async submitForm() {
       this.formValidation();
 
       if (!this.formIsValid) {
         return;
       }
 
-      if (this.mode === 'login') {
-        // dispatch login action
-      } else {
-        this.$store.dispatch('signup', {
-          email: this.email.value,
-          password: this.password.value,
-        });
+      this.isLoading = true;
+
+      try {
+        if (this.mode === 'login') {
+          // dispatch login action
+        } else {
+          await this.$store.dispatch('signup', {
+            email: this.email.value,
+            password: this.password.value,
+          });
+        }
+      } catch (error) {
+        this.error = error.message || 'Faild to authenticate, try later';
       }
+
+      this.isLoading = false;
 
       this.email.value = '';
       this.password.value = '';
@@ -96,6 +116,10 @@ export default {
       } else {
         this.mode = 'login';
       }
+    },
+
+    closeDialog() {
+      this.error = null;
     },
   },
 
