@@ -8,7 +8,7 @@ const store = createStore({
   modules: {
     coaches: coachesModule,
     requests: requestsModule,
-    // this module is not namespaced ⬇
+    // this module is not namespaced ⏬
     auth: authModule,
   },
 });

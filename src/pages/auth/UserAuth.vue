@@ -73,8 +73,14 @@ export default {
         return;
       }
 
-      console.log(this.email.value);
-      console.log(this.password.value);
+      if (this.mode === 'login') {
+        // dispatch login action
+      } else {
+        this.$store.dispatch('signup', {
+          email: this.email.value,
+          password: this.password.value,
+        });
+      }
 
       this.email.value = '';
       this.password.value = '';
