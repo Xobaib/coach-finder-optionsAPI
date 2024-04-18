@@ -58,7 +58,7 @@ export default {
 
     context.commit('setUser', {
       token: responseData.idToken,
-      userId: responseData.loaclId,
+      userId: responseData.localId,
       tokeExpiration: responseData.expiresIn,
     });
   },
