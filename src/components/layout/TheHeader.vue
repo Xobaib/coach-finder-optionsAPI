@@ -8,6 +8,9 @@
           <RouterLink to="/requests">Requests</RouterLink>
         </li>
         <li v-else><RouterLink to="/auth">Login</RouterLink></li>
+        <li v-if="isLoggedIn">
+          <RouterLink to="/auth" @click="logout">Loguot</RouterLink>
+        </li>
       </ul>
     </nav>
   </header>
@@ -15,6 +18,12 @@
 
 <script>
 export default {
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
+    },
+  },
+
   computed: {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
