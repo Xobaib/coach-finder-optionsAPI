@@ -18,8 +18,11 @@
             to="/register"
             >Register as Coach</BaseButton
           >
-          <BaseButton v-if="!isLoggedIn" :link="true" to="/auth"
-            >Login</BaseButton
+          <BaseButton
+            v-if="!isLoggedIn"
+            :link="true"
+            to="/auth?redirect=register"
+            >Login to Register as Coach</BaseButton
           >
         </div>
         <div v-if="isLoading">

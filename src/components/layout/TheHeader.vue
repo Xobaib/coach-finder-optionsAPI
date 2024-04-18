@@ -9,7 +9,7 @@
         </li>
         <li v-else><RouterLink to="/auth">Login</RouterLink></li>
         <li v-if="isLoggedIn">
-          <RouterLink to="/auth" @click="logout">Loguot</RouterLink>
+          <BaseButton @click="logout">Loguot</BaseButton>
         </li>
       </ul>
     </nav>
@@ -21,6 +21,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout');
+      this.$router.replace('/auth');
     },
   },
 
