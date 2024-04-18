@@ -13,10 +13,13 @@
             Refresh
           </BaseButton>
           <BaseButton
-            v-if="!isLoading && !isCoachRegistered"
+            v-if="!isLoading && !isCoachRegistered && isLoggedIn"
             :link="true"
             to="/register"
             >Register as Coach</BaseButton
+          >
+          <BaseButton v-if="!isLoggedIn" :link="true" to="/auth"
+            >Login</BaseButton
           >
         </div>
         <div v-if="isLoading">
@@ -84,6 +87,10 @@ export default {
 
     isCoachRegistered() {
       return this.$store.getters['coaches/isCoach'];
+    },
+
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
     },
   },
 
