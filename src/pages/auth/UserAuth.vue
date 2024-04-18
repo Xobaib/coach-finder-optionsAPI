@@ -94,7 +94,7 @@ export default {
 
       try {
         if (this.mode === 'login') {
-          this.$store.dispatch('login', actionPayload);
+          await this.$store.dispatch('login', actionPayload);
         } else {
           await this.$store.dispatch('signup', actionPayload);
         }
